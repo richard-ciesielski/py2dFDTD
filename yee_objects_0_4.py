@@ -13,7 +13,7 @@ from __future__ import division
 import numpy
 
 
-def addCircle(grid, x, y, R, wp, wj, gamma, sigma):
+def addPlasmonicCircle(grid, x, y, R, wp, wj, gamma, sigma):
     """adds a circular area of uniform material constants to a grid
         wp - plasma frequency
         wj - eigenfrequency of the Lorentz pole
@@ -36,6 +36,27 @@ def addCircle(grid, x, y, R, wp, wj, gamma, sigma):
                 
                 
     return grid
+    
+def addDielectricCircle(grid, x, y, R, n):
+    """adds a circular area of uniform material constants to a grid
+        n - refractive index, assuming mu==1"""
+    eps = numpy.sqrt(n)
+    
+    i0, j0 = grid.getIndex(x, y)
+    i1, j1 = grid.getIndex(x-R, y+R)
+    i2, j2 = grid.getIndex(x+R, y-R)
+    
+    for i in numpy.arange(i1, i2):
+        for j in numpy.arange(j1, j2):
+            x1 = grid.mesh_x[i, j]
+            y1 = grid.mesh_y[i, j]
+
+            if R**2 > (x-x1)**2 + (y-y1)**2:
+                grid.Eps[i, j] = eps                
+                
+    return grid
+    
+    
 def addRectangle(grid, x0, y0, x1, y1, wp, wj, gamma, sigma, R=0):
     """adds a rectangular area of uniform material constants to a grid
         wp - plasma frequency
