@@ -178,6 +178,23 @@ class staggered_grid_2D(object):
                 self.d_PML_y[-id:, :] = self.d_PML_y[-id:, :] + ((a - 
                                         self.mesh_y[-id:, :]) / a)**2. * ex
     
+    def addSFTF_contour(self, x0, x1, y0, y1):
+        """adds a total field/scattered field contour to the grid, determined by (x0,x1,y0,y1)"""
+        # calculate indicees
+        j0 = (abs(self.mesh_x[0,:] - x0)).argmin()
+        j1 = (abs(self.mesh_x[0,:] - x1)).argmin()
+        i0 = (abs(self.mesh_y[:,0] - y0)).argmin()
+        i1 = (abs(self.mesh_y[:,0] - y1)).argmin()
+    
+        j0 = int(self.Nx * .66)
+        self.ij_SFTF = numpy.array([[i,j0] for i in numpy.arange(0,self.Ny)])
+        
+        #self.ij_SFTF = numpy.concatenate([
+        #               numpy.array([[i,j0] for i in numpy.arange(i0,i1,numpy.sign(i1-i0))]),
+        #               numpy.array([[i1,j] for j in numpy.arange(j0,j1,numpy.sign(j1-j0))]),
+        #               numpy.array([[i,j1] for i in numpy.arange(i1,i0,numpy.sign(i0-i1))]),
+        #               numpy.array([[i0,j] for j in numpy.arange(j1,j0,numpy.sign(j0-j1))])])
+        
 def CalculationStep(grid0, grid1, t, excitations):
     """does the next step of the calculation
            - uses leapfrog and a staggered grid

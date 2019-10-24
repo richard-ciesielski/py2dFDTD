@@ -133,6 +133,36 @@ class testpulse_x_Exc(object):
 
         return grid
     
+    
+class PW_pulse_x_TFSF_Exc(object):
+    """gaussian test pulse, travelling in x direction, uses the total field/scattered field approach"""
+    def __init__(self, A, t0, x0, dt, w0):
+        self.type = "PW_pulse_x_TFSF"
+        self.A = A
+        self.t0 = t0
+        self.x0 = x0
+        self.dt = dt
+        self.w0 = w0
+        
+    def excite(self, grid, t):
+        i_list = grid.ij_SFTF[0,:]
+        j_list = grid.ij_SFTF[1,:]
+        
+        for i,j in zip(i_list,j_list):
+            # distance from start point
+            d = (grid.mesh_x[0, j] - self.x0) 
+            
+            # amplitude 
+            #A = self.A * numpy.exp(-0.5 * (t - d / grid.c0 - self.t0)**2 / self.dt**2 )
+            dA = self.A * (t - d / grid.c0 - self.t0) / self.dt**2 * numpy.exp(-0.5 * (t - d / grid.c0 - self.t0)**2 / self.dt**2 )
+            
+            # add the amplitude to the fields
+            grid.Hz[i, j] = grid.Hz[i, j] + dA
+            grid.Ey[i, j] = grid.Ey[i, j] + dA
+
+        return grid
+        
+  
 class testpulse_y_Exc(object):
     """instantaneous gaussian test pulse, travelling in y direction"""
     def __init__(self, y, H=1, T=1, sigma=1, rc=2):
