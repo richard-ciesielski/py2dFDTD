@@ -3,6 +3,7 @@ Two dimensional finite differences time domain (FDTD) simulation, based on Taflo
 The code calculates electromagnetic fields for a scattering setup in the time domain an visualizes the results.
 
 Example: dielectric sphere with constant refractive index
+
 ![example](figs/example1.png?raw=true "Example file")
 
 
