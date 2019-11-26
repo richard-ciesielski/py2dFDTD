@@ -1,23 +1,29 @@
 """Main library for 2D FDTD with YEE-Algorithmus: leapfrog and staggered grid
-    - in vacuum
-    - materials modeled via the Lorentz model (one pole):
-        eps(w) = 1 + wp  / (wj^2 + i * w * gamma - w^2)
-    - BC: PEC and PML
-    - TE-mode
-.....................................................................
-Institut fuer Angewandte Photophysik, Technische Universitaet Dresden
-Institute home page: http://www.iapp.de
-Erstellt im Rahmen einer Belegarbeit 2009/10 von Richard Ciesielski
-email: Richard.Ciesielski@gmail.com
-....................................................................."""
+- in vacuum
+- materials modeled via the Drude-Lorentz model (one pole):
+    eps(w) = (1 + 1j * sigma / w) * (1 + wp  / (wj^2 + i * w * gamma - w^2))
+- dielectric constants can be set
+- BC: PEC and PML
+- TE-mode
+
+Principal units are micrometers (1um = 1e-6m) and femtoseconds (1fs = 1e-15s)
+The resulting speed of light in vacuum is c0 = 0.3 um/fs
+
+(c) Richard Ciesielski, 2009-2019
+"""
+
 from __future__ import division     # 1/2 = .5
+
+__version__ = '0.5'
+__author__ = 'Richard Ciesielski'
+
 import numpy
 import pylab
 
 from numpy import pi
 
 class staggered_grid_2D(object): 
-    def __init__(self, Lx, Ly, Nx, Ny, Eps=1, Mu=1):
+    def __init__(self, Lx, Ly, Nx, Ny, Eps=8.854e-3, Mu=1254.9):
         """sets up a grid with homogeneous material constants
             parameters:
                 Lx,Ly - grid dimensions
@@ -28,6 +34,7 @@ class staggered_grid_2D(object):
         self.Ly = Ly
         self.Nx = Nx
         self.Ny = Ny
+        
         # integer gridpoints:
         x, h1 = numpy.linspace(0, Lx, Nx, retstep=True)
         self.mesh_x = x * numpy.ones((Ny, 1))
@@ -77,10 +84,6 @@ class staggered_grid_2D(object):
         # material constants
         self.Eps = numpy.ones((Ny, Nx)) * Eps
         self.Mu = numpy.ones((Ny, Nx)) * Mu
-        
-        # determine vacuum speed of light and time step:
-        self.c0 = 1. / numpy.sqrt(Mu * Eps)
-        self.dt = self.h * .7 / self.c0
 
         # Lorentz-model (one pole)
         self.wj = numpy.zeros((Ny, Nx))             # freq. of pole p j

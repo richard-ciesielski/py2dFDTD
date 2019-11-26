@@ -1,14 +1,17 @@
 """Plotting routines for 2D FDTD with YEE-Algorithmus: leapfrog and staggered grid
-    according to Taflove's book
-    - in vacuum
-    - BC: PEC and PML
-    - TE-mode
-.....................................................................
-Institut fuer Angewandte Photophysik, Technische Universitaet Dresden
-Institute home page: http://www.iapp.de
-Erstellt im Rahmen einer Belegarbeit 2009/10 von Richard Ciesielski
-email: Richard.Ciesielski@gmail.com
-....................................................................."""
+according to Taflove's book
+- in vacuum
+- BC: PEC and PML
+- TE-mode
+
+Principal units are micrometers (1um = 1e-6m) and femtoseconds (1fs = 1e-15s)
+The resulting speed of light in vacuum is c0 = 0.3 um/fs
+
+(c) Richard Ciesielski, 2009-2019
+"""
+
+__version__ = '0.5'
+__author__ = 'Richard Ciesielski'
 
 import numpy
 import pylab

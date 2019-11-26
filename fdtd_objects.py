@@ -1,15 +1,20 @@
 """Object library for 2D FDTD with YEE-Algorithmus: leapfrog and staggered grid
-    according to Taflove's book
-    - in vacuum
-    - BC: PEC and PML
-    - TE-mode
-.....................................................................
-Institut fuer Angewandte Photophysik, Technische Universitaet Dresden
-Institute home page: http://www.iapp.de
-Erstellt im Rahmen einer Belegarbeit 2009/10 von Richard Ciesielski
-email: Richard.Ciesielski@gmail.com
-....................................................................."""
+according to Taflove's book
+- in vacuum
+- BC: PEC and PML
+- TE-mode
+
+Principal units are micrometers (1um = 1e-6m) and femtoseconds (1fs = 1e-15s)
+The resulting speed of light in vacuum is c0 = 0.3 um/fs
+
+(c) Richard Ciesielski, 2009-2019
+"""
+
 from __future__ import division
+
+__version__ = '0.5'
+__author__ = 'Richard Ciesielski'
+
 import numpy
 
 
@@ -52,12 +57,12 @@ def addDielectricCircle(grid, x, y, R, n):
             y1 = grid.mesh_y[i, j]
 
             if R**2 > (x-x1)**2 + (y-y1)**2:
-                grid.Eps[i, j] = eps                
+                grid.Eps[i, j]*= eps                
                 
     return grid
     
     
-def addRectangle(grid, x0, y0, x1, y1, wp, wj, gamma, sigma, R=0):
+def addPlasmonicRectangle(grid, x0, y0, x1, y1, wp, wj, gamma, sigma, R=0):
     """adds a rectangular area of uniform material constants to a grid
         wp - plasma frequency
         wj - eigenfrequency of the Lorentz pole
@@ -96,7 +101,7 @@ def addRectangle(grid, x0, y0, x1, y1, wp, wj, gamma, sigma, R=0):
         
     return grid
    
-def addTriangle(grid, x0, y0, x1, y1, wp, wj, gamma, sigma):
+def addPlasmonicTriangle(grid, x0, y0, x1, y1, wp, wj, gamma, sigma):
     """adds a triangular area of uniform material constants to a grid
         wp - plasma frequency
         wj - eigenfrequency of the Lorentz pole

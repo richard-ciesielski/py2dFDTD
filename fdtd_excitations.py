@@ -1,14 +1,17 @@
 """Excitation library for 2D FDTD with YEE-Algorithmus: leapfrog and staggered 
-    grid according to Taflove's book
-    - in vacuum
-    - BC: PEC and PML
-    - TE-mode
-.....................................................................
-Institut fuer Angewandte Photophysik, Technische Universitaet Dresden
-Institute home page: http://www.iapp.de
-Erstellt im Rahmen einer Belegarbeit 2009/10 von Richard Ciesielski
-email: Richard.Ciesielski@gmail.com
-....................................................................."""
+grid according to Taflove's book
+- in vacuum
+- BC: PEC and PML
+- TE-mode
+
+Principal units are micrometers (1um = 1e-6m) and femtoseconds (1fs = 1e-15s)
+The resulting speed of light in vacuum is c0 = 0.3 um/fs
+
+(c) Richard Ciesielski, 2009-2019
+"""
+
+__version__ = '0.5'
+__author__ = 'Richard Ciesielski'
 
 import numpy
 from numpy import pi
@@ -102,7 +105,7 @@ class testpulse_Exc(object):
     
 class testpulse_x_Exc(object):
     """instantaneous gaussian test pulse, travelling in x direction"""
-    def __init__(self, x, H=1, T=1, sigma=1, rc=2):
+    def __init__(self, x, H=1, T=10, sigma=1, rc=2):
         self.type = "testpulse"
         self.x = x
         self.H = H                          # positive=travelling to the right
@@ -123,14 +126,12 @@ class testpulse_x_Exc(object):
                     
                     if  (j - jm)**2 < r0:
                         r =  (grid.mesh_x[0, j] - self.x)**2 
-                        grid.Hz[i, j] = grid.Hz[i, j] + 1 / (2 * pi * self.sigma**2) * (
-                            numpy.exp(-r / (2 * self.sigma**2)) - 
-                            numpy.exp(-self.rc**2 / (2 * self.sigma**2)))
                         
-                        grid.Ey[i, j] = grid.Ey[i, j] -self.H / (2 * pi * self.sigma**2) * (
-                            numpy.exp(-r / (2 * self.sigma**2)) - 
-                            numpy.exp(-self.rc**2 / (2 * self.sigma**2)))
-
+                        grid.Hz[i, j] = self.H * (
+                            numpy.exp(-r / (2 * self.sigma**2)))
+                        
+                        grid.Ey[i, j] =  1. / grid.c0 / grid.Eps[i, j] * self.H * (
+                            numpy.exp(-r / (2 * self.sigma**2)))
         return grid
     
     
