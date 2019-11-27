@@ -45,7 +45,7 @@ def addPlasmonicCircle(grid, x, y, R, wp, wj, gamma, sigma):
 def addDielectricCircle(grid, x, y, R, n):
     """adds a circular area of uniform material constants to a grid
         n - refractive index, assuming mu==1"""
-    eps = numpy.sqrt(n)
+    eps = n**2
     
     i0, j0 = grid.getIndex(x, y)
     i1, j1 = grid.getIndex(x-R, y+R)
