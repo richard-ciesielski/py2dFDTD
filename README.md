@@ -4,7 +4,7 @@ The code calculates electromagnetic fields for a scattering setup in the time do
 
 Example: dielectric cylinder with constant refractive index (n=1.25), excited by a plane wave
 
-![example](figs/example_n=2.5_wl=1_R=1.5.png?raw=true "Example file")
+![example](figs/example_n=1.25_wl=1_R=1.5.png?raw=true "Example file")
 
 
 [1] Advances in FDTD computational electrodynamics: photonics and nanotechnology, A Taflove, A Oskooi, SG Johnson, Artech house (2013)
